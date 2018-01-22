@@ -24,7 +24,7 @@ header { width: 100%; background:url(../images/sinablogb.jpg) no-repeat center #
 .leftbox h2,.rightbox h2{ background:url(../images/tp.jpg) repeat-x ; color:#8B745C; font-size:12px; font-family: "ËÎÌו",sans-serif; padding:5px; border:#F7F3EE 1px solid}
 .box{ background:#F7F3EE; width:208px; border:#B19C76 1px solid; margin-bottom:10px}
 .vcard{ padding-bottom:10px}
-.photo{ display:block; margin:10px auto}
+.photo{ display:block; margin:10px auto ;width:192px;hight:192px}
 .vcard p{ text-indent:2em; color:#917F5F; line-height:24px}
 .blogclass ul{ padding:10px 0}
 .blogclass ul li{ background:url(../images/dot.gif) no-repeat left center; padding:0 0 0 10px; margin-left:20px}
