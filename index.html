@@ -1,104 +1,186 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>於之博客</title>
-<meta name="keywords" content="java相关技术博客,於之博客" />
-<meta name="description" content="j2ee博客,於之博客" />
-<link href="css/styles.css" rel="stylesheet">
-<link rel="shortcut icon" href="images/favicon.ico"/>
-<link rel="bookmark" href="images/favicon.ico"/>
-<!--[if lt IE 9]>
-<script src="js/modernizr.js"></script>
-<![endif]-->
-</head>
-<body>
-<article>
-  <header>
-    <div class="toptitle">
-      <h1>浣溪沙 梅花梦事</h1>
-      <p class="byline">――梅如是</p>
-    </div>
-    
-    <object id="swftitlebar" data="images/79514.swf" width="100%" height="220" type="application/x-shockwave-flash">
-      <param name="allowScriptAccess" value="always">
-      <param name="allownetworking" value="all">
-      <param name="allowFullScreen" value="true">
-      <param name="wmode" value="transparent">
-      <param name="menu" value="false">
-      <param name="scale" value="noScale">
-      <param name="salign" value="1">
-    </object>
-    <p class="sign">收我南窗梦一帘,人间故事密封缄。迎将冷淡到江南。 身逐空花归净界,愿随清月落寒潭。红尘隔断两无堪。</p>
-  </header>
-  <div class="leftbox">
-    <div class="vcard box">
-      <h2>个人资料</h2>
-      <img src="images/180.png" class="photo" style="width: 180px ; height: 180px" >
-      <p class="fn">於之</p>
-      <p class="url">主页：www.wodewulian.com</p>
-      <p class="address">现居：杭州市</p>
-      <p class="role">职业：java开发</p>
-      <p class="role">CSDN：</p>
-    </div>
-    <div class="blogclass box">
-      <h2>博客分类</h2>
-      <ul>
-        <li><a href="/">经验教训</a></li>
-        <li><a href="/">j2ee</a></li>
-        <li><a href="/">关系型数据库</a></li>
-        <li><a href="/">多线程</a></li>
-        <li><a href="/">架构</a></li>
-        <li><a href="/">javascript</a></li>
-      </ul>
-    </div>
-    <div class="friends box">
-      <h2>最近访客</h2>
-      <ul>
-        <li><a href="/"><img src="images/01.jpg"></a></li>
-        <li><a href="/"><img src="images/s3.jpg"></a></li>
-        <li><a href="/"><img src="images/s0.jpg"></a></li>
-        <li><a href="/"><img src="images/s2.jpg"></a></li>
-        <li><a href="/"><img src="images/s5.jpg"></a></li>
-        <li><a href="/"><img src="images/s6.jpg"></a></li>
-        <li><a href="/"><img src="images/s7.jpg"></a></li>
-        <li><a href="/"><img src="images/s8.jpg"></a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="rightbox box">
-    <h2>人气博文</h2>
-    <h3 class="title"><a href="http://blog.csdn.net/sinat_28771747/article/details/53520253">实现从oss（阿里云）服务器以附件形式下载文件（含批量下载）</a></h3>
-    <ul class="text">
-        <p>笔者在项目中写一个从阿里云服务器上面以附件形式下载文件的接口时，遇到了问题，</p>
-        <p>网上搜索无任何相关的解决方案，最后通过通过自己查阅API文档，再结合自己的经验，</p>
-        <p>实现了下载功能。</p>
+---
+layout: page
+title: Airspace
+permalink: /
+---
 
-      	<p>通过查询oss官方文档，我发现只有一个下载文件到本地的方法（方法1），但是这个方法</p>
-      	<p>下载的文件只能够将文件下载到本地的一个固定的目录下，即必须要在API提供的方法中写</p>
-      	<p>死下载文件的下载路径，而且下载文件时没有任何下载提示，所以这个方法不适合直接在项目中使用。​</p>
-    </ul>
-    <div class="textfoot"> <a href="http://blog.csdn.net/sinat_28771747/article/details/53520253">阅读全文</a><a href="/">评论</a><a href="/">转载</a> </div>
-   
-    <h3 class="title"><a href="http://blog.csdn.net/sinat_28771747/article/details/78333177">微信扫码支付官方下载的demo本地运行时遇到的坑以及对应解决方法</a></h3>
-    <ul class="text">
-        <p>由于公司需要，由我负责一个项目在线支付的模块，于是我分别从微信和支付宝官网分别下载</p>
-        <p>了扫码支付的demo，支付宝的demo只要按照官方说明还是比较轻松就能跑起来的，而且需要的</p>
-        <p>jar报比较少，项目本身就是一个可以运行的web小项目（没有使用maven管理依赖，毕竟本来</p>
-        <p>就没有几个jar包需要导，本身就用不着）。然后，微信支付不光官方文档写的比较乱，官方提</p>
-        <p>供的demo更是让我无语，下面就说一说我在本地运行微信扫码支付项目所遇到的坑以及解决方...</p>
-    </ul>
-    <div class="textfoot"> <a href="http://blog.csdn.net/sinat_28771747/article/details/78333177">阅读全文</a><a href="/">评论</a><a href="/">转载</a> </div>
-<!--     <div class="pages"><span>1</span><a href="/" hidefocus="">2</a><a href="/" hidefocus="">3</a><a href="/" class="next">下一页&gt;&gt;</a></div> -->
+<!-- Slider Start -->
+<section id="slider">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-2">
+        <div class="block">
+          <h1 class="animated fadeInUp">A DIGITAL MARKETING &#38; <br> DESIGN AGENCY</h1>
+          <p class="animated fadeInUp">We love the Web and the work we do. We work closely with our clients to deliver the best possible solutions for their needs</p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="blank"></div>
-  <div class="Copyright">
-    <ul>
-      
-      <li><p>欢迎各位访问我的CSDN博客，主页为</p><a href="http://blog.csdn.net/sinat_28771747">跳转到CSDN</a></li>
-      
-    </ul>
+</section>
+<!-- Wrapper Start -->
+<section id="intro">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7 col-sm-12">
+        <div class="block">
+          <div class="section-title">
+            <h2>About Us</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics</p>
+          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id </p>
+        </div>
+      </div><!-- .col-md-7 close -->
+      <div class="col-md-5 col-sm-12">
+        <div class="block">
+          <img src="img/wrapper-img.png" alt="Img">
+        </div>
+      </div><!-- .col-md-5 close -->
+    </div>
   </div>
-</article>
-</body>
-</html>
+</section>
+
+<section id="feature">
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-6">
+      <h2>WE BELIEVE IN GREAT IDEAS</h2>
+      <p>Maecenas faucibus mollis interdum. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+      <p>Maecenas faucibus mollis interdum. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+      <p>Maecenas faucibus mollis interdum. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+      <a href="#" class="btn btn-view-works">View Works</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Service Start -->
+<section id="service">
+  <div class="container">
+    <div class="row">
+      <div class="section-title">
+        <h2>Our Services</h2>
+        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics</p>
+      </div>
+    </div>
+    <div class="row ">
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="icon ion-coffee"></i>
+          <h4>Branding</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-compass"></i>
+          <h4>Web Design</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-image"></i>
+          <h4>App Design</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-bug"></i>
+          <h4>Start Up</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-headphone"></i>
+          <h4>Logo Design</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-leaf"></i>
+          <h4>Development</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-planet"></i>
+          <h4>Brand Identity</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="service-item">
+          <i class="ion-earth"></i>
+          <h4>Brand Identity</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Call to action Start -->
+<section id="call-to-action">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="block">
+          <h2>We design delightful digital experiences.</h2>
+          <p>Read more about what we do and our philosophy of design. Judge for yourself The work and results we’ve achieved for other clients, and meet our highly experienced Team who just love to design.</p>
+          <a class="btn btn-default btn-call-to-action" href="#" >Tell Us Your Story</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Content Start -->
+<section id="testimonial">
+  <div class="container">
+    <div class="row">
+      <div class="section-title text-center">
+        <h2>Fun Facts About Us</h2>
+        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        {% if site.data.funfacts.size > 0 %}
+        <div class="block">
+          {% for ff in site.data.funfacts %}
+          <ul class="counter-box clearfix">
+            <li>
+              <div class="block">
+                <i class="{{ ff.icon }}"></i>
+                <h4 class="counter">{{ ff.counter }}</h4>
+                <span>{{ ff.text }}</span>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6">
+        {% if site.data.testimonials.size > 0 %}
+        <div class="testimonial-carousel">
+          <div id="testimonial-slider" class="owl-carousel">
+            {% for tm in site.data.testimonials %}
+            <div>
+                <img src="img/cotation.png" alt="IMG">
+                <p>{{ tm.testimonial }}</p>
+                <div class="user">
+                  <img src="{{ tm.image }}" alt="Pepole">
+                  <p><span>{{ tm.name }}</span> {{ tm.title }}</p>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
