@@ -4,78 +4,50 @@ sidebar_position: 2
 
 # 快速开始
 
-本文档介绍如何从源码构建 IOTGate，完成最小配置并启动一个可运行的网关实例。
+本文介绍 IOTGate 网关的本地编译、配置与启动方式，覆盖单机与集群两种部署形态。
 
 ## 环境要求
 
-- **操作系统**：Linux（README 中的启动命令面向 Linux 环境）
-- **Java 环境**：能够执行 `java -jar` 的 JDK（v2.2 配套控制台要求 JDK 21，网关本身以可执行 jar 形式运行）
-- **构建工具**：Maven（`mvn package` 打 jar 包）
-- **知识准备**：物联网应用层协议基础知识，如**大小端（字节序）**、**长度域**、**拆包/黏包**等概念
-
-:::warning
-IOTGate 的使用有一定门槛：配置多规约解析规则时，需要正确理解长度域偏移、长度域长度、长度是否包含长度域本身等参数，否则报文将无法正确拆包。
-:::
-
-## 获取源码
-
-源码地址（源码优先更新码云仓库）：
-
-- GitHub：https://github.com/BrianApple/IOTGate
-- 码云（Gitee）：https://gitee.com/willbeahero/IOTGate
-
-```bash
-git clone https://gitee.com/willbeahero/IOTGate.git
-cd IOTGate
-```
+- JDK 8+（入口类为 `Entrance.java`，自行将项目打成 jar 包运行）
+- Linux 服务器（演示在 linux 下执行 `java -jar`）
+- 可选：IOTGateConsole 管理平台（Spring Boot 3.5 Web 工程，默认端口 **8686**，需 MySQL）
 
 ## 编译打包
 
-README 要求"自行将项目打成 jar 包"，在项目根目录执行：
+自行将项目打成 jar 包：
 
 ```bash
 mvn package
 ```
 
-构建产物位于 `target/` 目录下，可执行 jar 包形如 `IOTGate-2.2.0-RELEASE.jar`，启动时将其作为 `iotGate.jar` 使用：
+打包完成后得到 `iotGate.jar`（jar 包名称以实际构建产物为准）。
 
-```bash
-java -jar target/IOTGate-2.2.0-RELEASE.jar -n 1 -f /path/to/iotGate.conf
-```
+## iotGate.conf 最小配置
 
-## 最小配置
-
-### 1. 编写规约配置文件 iotGate.conf
-
-网关启动时通过 `-f`（必选参数）加载多规约规则文件，多个规则之间**分号分隔**。仓库自带的 `iotGate.conf` 内容如下：
+网关启动时必须通过 `-f` 参数指定配置文件 `iotGate.conf` 的本地全路径。配置至少需要包含网关与前置通信所需的规约信息：
 
 ```properties
-# pId,isBigEndian(0=false),beginHexVal,lengthFieldOffset,lengthFieldLength,isDataLenthIncludeLenthFieldLenth(0=false),exceptDataLenth,port,heartbeat
-protocolType=1,0,-1,1,2,1,1,9811,60;2,1,-1,0,4,0,0,9812,300;3,1,-1,4,2,0,0,9813,130;
+# 规约编号, 参数..., 端口, 心跳周期
+# 例：modbus TCP 配置信息
+1,1,-1,4,2,0,0,9813,60
+# 例：IEC 104 配置信息
+2,1,-1,1,1,0,0,9814,60
+# 例：DLT 645 配置信息
+3,0,-1,9,1,0,2,9815,60
 ```
 
-其中：
+:::note
+- 单机版可以通过配置文件个性化配置规约的**心跳周期**；集群版默认心跳周期为 300 秒
+- 配置文件中默认支持两种真实报文结构（规约编号 1 与 2），详见 [多规约支持](./protocols.md)
+- 更多规约可通过 IOTGateConsole 远程开启/关闭/新增/删除，也可在本地配置多规约服务
+:::
 
-- `pId`：规约编号，`pId=1` 为默认规约
-- `isBigEndian`：是否大端，`0` 表示 false
-- `beginHexVal`：起始符（十六进制值），`-1` 表示无
-- `lengthFieldOffset`：长度域偏移
-- `lengthFieldLength`：长度域长度
-- `isDataLenthIncludeLenthFieldLenth`：数据长度是否包含长度域本身，`0` 表示 false
-- `exceptDataLenth`：额外长度
-- `port`：该规约对应的端口号（废弃了原 `-p` 命令行参数指定启动端口的方式）
-- `heartbeat`：该规约的心跳周期（秒）
+## 命令行参数
 
-### 2. 准备前置服务（master）
-
-IOTGate 与前置（master）通过数据通道通信，前置默认端口为 **8888**。最小部署时只需知道前置的 IP 地址即可。
-
-## 启动步骤
-
-命令行参数说明：
+启动命令：`java -jar iotGate.jar -n 1 [args...]`，默认前置端口为 8888（可自行在源码中修改）。
 
 | 参数 | 是否必选 | 是否含参 | 含义 |
-|------|---------|---------|------|
+|---|---|---|---|
 | `-n` | 是 | 是 | 网关编号 |
 | `-c` | 否 | 否 | 开启"主动注册到前端管理服务(IOTGateConsole)"，需配合 `-r` 指定 Console 地址 |
 | `-r` | 否 | 是 | 前端管理服务(Console)地址，支持 `ip` / `ip:port` / `http://ip:port`，默认端口 8686，如 `192.168.1.10:8686` |
@@ -83,48 +55,58 @@ IOTGate 与前置（master）通过数据通道通信，前置默认端口为 **
 | `-k` | 否 | 否 | 开启 kernel 模式，默认端口为 10915 |
 | `-f` | 是 | 是 | 配置文件 `iotGate.conf` 的本地全路径 |
 
+:::warning
+`-n` 与 `-f` 为必选参数；`-c` 必须与 `-r` 配合使用，否则无法注册到控制台。
+:::
+
+## 启动网关
+
 ### 单机方式启动
 
-使用 `-m` 指定前置服务地址：
+命令行参数使用 `-m` 指定前置服务地址：
 
 ```bash
-java -jar iotGate.jar -n 1 -f /opt/iot/iotGate.conf -m 192.168.1.10
+java -jar iotGate.jar -n 1 -m 192.168.1.20 -f /opt/iotgate/iotGate.conf
 ```
 
 ### 集群方式启动
 
-使用 `-c -r` 开启"主动注册到前端管理服务"模式，`-r` 指定 IOTGateConsole 地址（支持 `ip` 或 `ip:port`，默认端口 8686），同时 `-m` 指定前置服务地址（多个地址逗号分隔；v2.0 起去除 Zookeeper 依赖，通过 `-m` 直连前置，数据通道零改动）：
+命令行参数 `-c -r` 开启"主动注册到前端管理服务"模式，`-r` 指定 IOTGateConsole 地址（支持 `ip` 或 `ip:port`，默认端口 8686），同时 `-m` 指定前置服务地址（**逗号分隔**，支持多个前置）：
 
 ```bash
-java -jar iotGate.jar -n 1 -f /opt/iot/iotGate.conf -c -r 192.168.1.100:8686 -m 192.168.1.10,192.168.1.11
+java -jar iotGate.jar -n 1 -c -r 192.168.1.10:8686 -m 192.168.1.20,192.168.1.21 -f /opt/iotgate/iotGate.conf
 ```
 
 :::tip
-`-n`（网关编号）与 `-f`（配置文件全路径）是必选参数，其余参数按部署形态选用。
+v2.0 起去除 zookeeper 依赖，通过 `-m` 直连前置，数据通道零改动。
 :::
 
-## 验证运行
+注册与心跳机制：
 
-### 端口监听检查
+- 注册成功后网关每 **10s** 向 Console 发送心跳
+- Console 侧 **30s** 未收到心跳自动判离线
+- 网关正常关闭时主动反注册
+- Console 侧注册表与静态 `gate.nodes` 配置并存：**主动注册的节点优先，静态配置兜底**
 
-启动后网关会监听以下端口（取决于启动参数）：
+## 端口占用
 
-- **8888**：前置(master)数据通道（`-m` 参数直连）
-- **9811 / 9812 / 9813 等**：各规约对应的终端接入端口（由 `iotGate.conf` 中 `port` 字段决定）
+| 端口 | 说明 |
+|---|---|
+| **10915** | kernel 模式默认端口（`-k` 命令行参数开启） |
+| **10916** | rpc 通信（集群模式下开启，Console 经此端口调用网关规约启停等 RPC） |
+| **8888** | 前置(master)数据通道（`-m` 参数直连，默认端口） |
+| **8686** | IOTGateConsole 管理平台默认端口（`-r` 参数指向） |
 
-```bash
-ss -lntp | grep -E '8888|9811|9812|9813'
-```
+## 登录管理平台
 
-### 终端连接验证
+网关配合 IOTGateConsole 使用时，访问控制台登录页，用户名密码随意输入（没有存库）：
 
-使用 TCP 客户端连接规约端口（如 9811），发送符合规约结构的真实报文，观察网关是否正常拆包并转发给前置：
+![新版登录页](/img/iotgate/login-v2.2-new.png)
 
-```bash
-# 以 nc 为例连接规约 1 的端口
-nc 127.0.0.1 9811
-```
+## 压测验证
 
-### 集群模式验证
+win10 笔记本、堆内存 2G、线程数 6k 条件下的压测聚合报告：
 
-若以 `-c -r` 启动，注册成功后网关每 **10s** 向 Console 发送一次心跳；Console 侧 **30s** 未收到心跳自动判定节点离线。可在 IOTGateConsole 的节点管理页实时查看网关节点状态、最近心跳与在线时长。
+![IOTGate 开源版压测聚合报告](/img/iotgate/benchmark-report.png)
+
+本地压测数据：单网关、单前置节点，每秒处理并发心跳 8000+，20W 在线终端（长连接保持）内存占用量 1G 左右。
