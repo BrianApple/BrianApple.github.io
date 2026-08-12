@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: '於之开源',
   tagline: '从物联网网关到 API 中间件——用 Netty 打造高并发、多规约的通信基础设施',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
 
   url: 'https://BrianApple.github.io',
   baseUrl: '/',
@@ -55,7 +55,7 @@ const config: Config = {
       title: '於之开源',
       logo: {
         alt: '於之开源',
-        src: 'img/logo.svg',
+        src: 'img/favicon.png',
       },
       items: [
         {

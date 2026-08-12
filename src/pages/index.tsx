@@ -14,6 +14,7 @@ type Product = {
   gitee: string;
   github: string;
   accent: string;
+  logo?: string;
   featured?: boolean;
 };
 
@@ -28,6 +29,7 @@ const PRODUCTS: Product[] = [
     gitee: 'https://gitee.com/willbeahero/IOTGate',
     github: 'https://github.com/BrianApple/IOTGate',
     accent: '#38bdf8',
+    logo: '/img/iotgate/iotgate-logo.png',
     featured: true,
   },
   {
@@ -40,6 +42,7 @@ const PRODUCTS: Product[] = [
     gitee: 'https://gitee.com/willbeahero/IOTGateConsole',
     github: 'https://github.com/BrianApple/IOTGateConsole',
     accent: '#34d399',
+    logo: '/img/iotgate/iotgate-logo.png',
   },
   {
     name: 'HXAPIGate',
@@ -174,6 +177,11 @@ export default function Home(): JSX.Element {
           <div className={styles.grid}>
             {PRODUCTS.map((p) => (
               <div key={p.name} className={`${styles.card} ${p.featured ? styles.cardFeatured : ''}`}>
+                {p.logo && (
+                  <div className={styles.cardLogoWrap}>
+                    <img src={p.logo} alt={p.name} className={styles.cardLogo} />
+                  </div>
+                )}
                 <div className={styles.cardTop}>
                   <span className={styles.langDot} style={{background: p.accent}} />
                   <span className={styles.lang}>{p.lang}</span>
