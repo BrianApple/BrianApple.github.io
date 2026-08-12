@@ -70,6 +70,11 @@ const config: Config = {
           position: 'left',
         },
         {
+          to: 'docs/iotgate-console/intro',
+          label: 'IOTGateConsole',
+          position: 'left',
+        },
+        {
           to: 'docs/hxapigate/intro',
           label: 'HXAPIGate',
           position: 'left',
@@ -102,7 +107,6 @@ const config: Config = {
             {label: 'IOTGate 智能网关', to: 'docs/iotgate/intro'},
             {label: 'IOTGateConsole 控制台', to: 'docs/iotgate-console/intro'},
             {label: 'HXAPIGate API 网关', to: 'docs/hxapigate/intro'},
-            {label: 'iRpc RPC 框架', to: 'docs/irpc/intro'},
             {label: 'Licen 授权系统', to: 'docs/licen/intro'},
           ],
         },

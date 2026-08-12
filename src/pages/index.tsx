@@ -53,17 +53,6 @@ const PRODUCTS: Product[] = [
     accent: '#a78bfa',
   },
   {
-    name: 'iRpc',
-    tag: 'RPC 框架',
-    lang: 'Java',
-    desc: '基于 NIO 技术的轻量级高性能 RPC 框架，内置 Raft 选举算法，自主选举 Leader-Follower 节点。',
-    points: ['NIO 通信', 'Raft 选举', '轻量无依赖'],
-    to: '/docs/irpc/intro',
-    gitee: 'https://gitee.com/willbeahero/iRpc',
-    github: 'https://github.com/BrianApple/iRpc',
-    accent: '#fbbf24',
-  },
-  {
     name: 'Licen',
     tag: '授权系统',
     lang: 'Go',
@@ -76,14 +65,14 @@ const PRODUCTS: Product[] = [
   },
 ];
 
-const STAT_FALLBACK = {giteeStars: 2379, githubStars: 68, forks: 908};
+const STAT_FALLBACK = {giteeStars: 2368, githubStars: 64, forks: 890};
 
 function useStats() {
   const [stats, setStats] = useState(STAT_FALLBACK);
   useEffect(() => {
     let alive = true;
-    const giteeNames = ['IOTGate', 'HXAPIGate', 'iRpc', 'IOTGateConsole', 'licen'];
-    const githubNames = ['IOTGate', 'HXAPIGate', 'iRpc', 'IOTGateConsole', 'Licen'];
+    const giteeNames = ['IOTGate', 'IOTGateConsole', 'HXAPIGate', 'licen'];
+    const githubNames = ['IOTGate', 'IOTGateConsole', 'HXAPIGate', 'Licen'];
     let giteeStars = 0, githubStars = 0, forks = 0, giteeOk = 0, githubOk = 0;
     Promise.all(
       giteeNames.map((n) =>
@@ -130,7 +119,7 @@ function fmt(n: number) {
 export default function Home(): JSX.Element {
   const stats = useStats();
   return (
-    <Layout description="於之的开源项目文档站：IOTGate 物联网网关、HXAPIGate API 网关、iRpc、IOTGateConsole、Licen 授权系统的完整教程。">
+    <Layout description="於之的开源项目文档站：IOTGate 物联网网关、IOTGateConsole 控制台、HXAPIGate API 网关、Licen 授权系统的完整教程。">
       <main className={styles.main}>
         {/* Hero */}
         <section className={styles.hero}>
@@ -157,7 +146,7 @@ export default function Home(): JSX.Element {
               <span className={styles.statLabel}>Gitee Forks</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNum}>5</span>
+              <span className={styles.statNum}>4</span>
               <span className={styles.statLabel}>开源产品</span>
             </div>
           </div>
@@ -238,11 +227,6 @@ export default function Home(): JSX.Element {
             <div className={styles.flowStep}>
               <b>能力开放</b>
               <span>HXAPIGate<br />零侵入 · 资源授权</span>
-            </div>
-            <div className={styles.flowArrow}>→</div>
-            <div className={styles.flowStep}>
-              <b>服务治理</b>
-              <span>iRpc<br />Raft · 高可用</span>
             </div>
             <div className={styles.flowArrow}>→</div>
             <div className={styles.flowStep}>
