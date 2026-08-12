@@ -178,9 +178,7 @@ export default function Home(): JSX.Element {
             {PRODUCTS.map((p) => (
               <div key={p.name} className={`${styles.card} ${p.featured ? styles.cardFeatured : ''}`}>
                 {p.logo && (
-                  <div className={styles.cardLogoWrap}>
-                    <img src={p.logo} alt={p.name} className={styles.cardLogo} />
-                  </div>
+                  <img src={p.logo} alt={p.name} className={styles.cardLogo} />
                 )}
                 <div className={styles.cardTop}>
                   <span className={styles.langDot} style={{background: p.accent}} />
