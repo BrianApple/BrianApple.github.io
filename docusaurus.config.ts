@@ -85,7 +85,6 @@ const config: Config = {
           position: 'left',
         },
         {to: 'blog', label: '博客', position: 'left'},
-        {href: 'https://BrianApple.github.io/blog-legacy/index.html', label: '旧站', position: 'left'},
         {
           href: 'https://gitee.com/willbeahero',
           label: 'Gitee',
