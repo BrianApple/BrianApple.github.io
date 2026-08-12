@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+.docusaurus/
+
+# Generated files
+.npm/
+.yarn/
+
+# Misc
+.DS_Store
+*.log
