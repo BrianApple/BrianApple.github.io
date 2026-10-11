@@ -21,22 +21,23 @@ java -jar iotGate.jar -n 1 -m 192.168.1.20 -f /opt/iotgate/iotGate.conf
 
 ### 网关 + 管理平台（推荐）
 
-网关 `-c -r <consoleIp>` 主动注册到 IOTGateConsole，Console 提供**节点监控、规约启停管理、AI 智能体**等能力，形成完整的"网关-控制台"管理闭环：
+启动网关（**网关侧无需任何 Console 配置**），然后在 IOTGateConsole 的「节点管理」页**登记网关 IP 与指令端口**（默认 10917），Console 即开始探针判活并提供**节点监控、规约启停管理、AI 智能体**等能力：
 
 ```bash
-java -jar iotGate.jar -n 1 -c -r 192.168.1.10:8686 -m 192.168.1.20 -f /opt/iotgate/iotGate.conf
+# 网关：只指定前置即可
+java -jar iotGate.jar -n 1 -m 192.168.1.20 -f /opt/iotgate/iotGate.conf
 ```
 
 :::note
-使用前提：管理平台需配置 MySQL（本机 13306/3306 均可，见 IOTGateConsole README）并启动；网关侧无需任何配置依赖 Console 的注册表，未启动 Console 时网关仅以 `-m` 模式运行，**不影响数据通道**。
+使用前提：管理平台需配置 MySQL（本机 13306/3306 均可，见 IOTGateConsole README）并启动，导入 `dump-iotgatedb-*.sql` 建表；未启动 Console 时网关仅以 `-m` 模式运行，**不影响数据通道**。
 :::
 
 ## 集群部署
 
-集群方式启动：命令行参数 `-c -r` 开启"主动注册到前端管理服务"模式，`-r` 指定 IOTGateConsole 地址（支持 `ip` 或 `ip:port`，默认端口 8686），同时 `-m` 指定前置服务地址（**逗号分隔**，支持多前置负载均衡）：
+集群部署同样是**在 Console 侧登记多个网关 IP**，数据通道由 `-m` 逗号分隔指定多个前置（轮询负载均衡）：
 
 ```bash
-java -jar iotGate.jar -n 1 -c -r 192.168.1.10:8686 -m 192.168.1.20,192.168.1.21 -f /opt/iotgate/iotGate.conf
+java -jar iotGate.jar -n 1 -m 192.168.1.20,192.168.1.21 -f /opt/iotgate/iotGate.conf
 ```
 
 :::tip
@@ -48,35 +49,49 @@ v2.0 起去除 zookeeper 依赖，集群模式通过 `-m` 直连前置，数据�
 | 检查项 | 要求 |
 |---|---|
 | IOTGateConsole 服务 | 已启动，默认端口 8686 可访问 |
-| MySQL | 已就绪（本机 13306/3306 均可，见 IOTGateConsole README），`strategy.sql` 已导入 |
-| 网关 RPC 端口 | 10916 端口开放，Console 可达（规约启停等 RPC 调用依赖） |
+| MySQL | 已就绪（本机 13306/3306 均可，见 IOTGateConsole README），`dump-iotgatedb-*.sql` 已导入 |
+| 网关指令端口 | **10917** 开放，Console 可达（规约启停等指令下发依赖） |
 | 前置(master) | 8888 端口可达（`-m` 直连） |
-| 网络 | 网关 ↔ Console、网关 ↔ 前置 网络互通 |
+| 网络 | Console → 网关（10917）、网关 → 前置（8888）网络互通 |
 
-## 与 Console 协同机制
+## 与 Console 的协同机制
+
+**控制通道为 Console 主动模式**（网关不主动上报）：
 
 | 机制 | 说明 |
 |---|---|
-| **主动注册** | 网关启动时通过 `-c -r` 主动注册到 IOTGateConsole（`POST /gate/register`），注册成功即自动同步规约 |
-| **心跳上报** | 注册成功后网关每 **10s** 向 Console 发送心跳（`POST /gate/heartbeat`） |
-| **离线判定** | Console 侧 **30s** 未收到心跳自动判离线并移除 |
-| **自愈重注册** | 节点不存在时心跳返回 `retSig=404`，触发网关**重新注册** |
-| **正常反注册** | 网关正常关闭时主动反注册（`POST /gate/unregister`） |
-| **双通道并存** | Console 侧注册表与静态 `gate.nodes` 配置并存：**主动注册的节点优先，静态配置兜底** |
+| **节点登记** | 在 Console「节点管理」页填入网关 IP 与指令端口（默认 10917），写入 `gate_node` 表 |
+| **探针判活** | Console 默认每 **10s** 调 `GET /gate/status` 取运行快照，据此判断在线状态与已加载规约 |
+| **指令下发** | 规约新增/启停/删除均通过 `POST /gate/command` 由 Console 主动下发 |
+| **差量补发** | 以最近一次探针的运行集为差量基准，只下发必要的启停指令；同时决定补发节奏 |
+| **自动补发** | 探针发现网关缺少某规约时，Console 自动补发一次 `ADD_PROTOCOL`（解决启动时「规约不存在」） |
+| **即时刷新** | 指令下发后 Console 立即探针一次并推送前端（SSE），UI 不必等下一个探针周期 |
+| **指令鉴权** | 网关 `iotGate.conf` 配置 `commandToken` 后，Console 需在 `application.properties` 配置同名 `gate.command-token`，请求带 `X-Gate-Token` 头 |
+
+:::warning 已废弃的旧机制
+原「网关 `-c -r` 主动注册 → 10s 心跳上报 → 30s 判离线 → 404 自愈重注册」这一整套**已随控制通道反转移除**：`-c` / `-r` 参数不再存在，网关侧也不再有注册/心跳客户端，原 RPC 端口 **10916 不再监听**。
+:::
 
 ## 节点管理
 
-实时展示网关节点列表，区分**动态注册**（网关 `-c -r` 主动注册，含最近心跳、在线时长）与**静态配置**（application.properties 中 `gate.nodes` 兜底）两种来源，节点在线状态、RPC 连通状态一目了然：
+实时展示网关节点列表，Console 通过 HTTP 探针（默认 10s）判活并区分失败原因，上下线经 SSE 实时推送到前端：
 
-![节点管理（动态注册节点监控）](/img/iotgate/node-manage-v2.2.png)
+![节点管理](/img/iotgate/node-manage-v3.0.2.png)
+
+| 接口 | 说明 |
+|---|---|
+| `GET /gate/nodes` | 节点列表（含在线状态） |
+| `POST /gate/nodes` | 新增节点（网关 IP + 指令端口） |
+| `DELETE /gate/nodes/{ip}` | 删除节点 |
 
 ## 规约远程管理
 
-远程开启/关闭/新增/删除网关多规约解析服务，规约参数（大小端、长度域偏移/长度、端口等）在线维护，变更实时同步到网关：
+远程开启/关闭/新增/删除网关多规约解析服务，规约参数（大小端、起始符、长度域偏移/长度、是否含长度域、额外长度、端口、心跳）在线维护，**变更实时同步到网关**：
 
-![规约管理（多规约策略配置）](/img/iotgate/strategy-page-v2.png)
+![规约管理（多规约策略配置）](/img/iotgate/strategy-page-v3.0.2.png)
 
 :::warning
-- 网关 RPC 端口为 **10916**（集群模式下开启），Console 经此端口调用网关规约启停等 RPC，请确保网络可达
+- 网关**指令端口为 10917**（`iotGate.conf` 的 `commandPort` 可改），Console 经此端口下发 `POST /gate/command`，请确保网络可达
+- 指令端口能触发**高级规约**的 javassist 动态编译（等价于远程执行 Java 代码），**只应暴露在内网**
 - kernel 模式默认端口为 **10915**（`-k` 命令行参数开启）
 :::
